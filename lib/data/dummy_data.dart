@@ -58,35 +58,35 @@ const DUMMY_CATEGORIES = [
 ];
 
   
-  final DUMMY_ALUNOS = [
-  Aluno(
-      id: "0",
-      nomeCompleto: 'Cleiton Alencar',
-      dataNascimento: '23/12/1997',
-      telefone: '8899999999',
-      endereco: 'Rua A',
-      patologia: 'Nenhuma',
-      objetivo: 'Hipertrofia',
-      acompanhamentoNutricional: "Não",
-      status: true),
-  Aluno(
-      id: "1",
-      nomeCompleto: 'Vitória Glenda',
-      dataNascimento: '24/03/2001',
-      telefone: '8899123456',
-      endereco: 'Rua C',
-      patologia: 'Nenhuma',
-      objetivo: 'Perda de peso',
-      acompanhamentoNutricional: "Não",
-      status: true),
-  Aluno(
-      id: "2",
-      nomeCompleto: 'Fulano de tal',
-      dataNascimento: '01/06/2006',
-      telefone: '8898765432',
-      endereco: 'Rua C',
-      patologia: 'Nenhuma',
-      objetivo: 'Powerlifting',
-      acompanhamentoNutricional: "Não",
-      status: true)
-];
+//   final DUMMY_ALUNOS = [
+//   Aluno(
+//       id: "0",
+//       nomeCompleto: 'Cleiton Alencar',
+//       dataNascimento: '23/12/1997',
+//       telefone: '8899999999',
+//       endereco: 'Rua A',
+//       patologia: 'Nenhuma',
+//       objetivo: 'Hipertrofia',
+//       acompanhamentoNutricional: "Não",
+//       status: true),
+//   Aluno(
+//       id: "1",
+//       nomeCompleto: 'Vitória Glenda',
+//       dataNascimento: '24/03/2001',
+//       telefone: '8899123456',
+//       endereco: 'Rua C',
+//       patologia: 'Nenhuma',
+//       objetivo: 'Perda de peso',
+//       acompanhamentoNutricional: "Não",
+//       status: true),
+//   Aluno(
+//       id: "2",
+//       nomeCompleto: 'Fulano de tal',
+//       dataNascimento: '01/06/2006',
+//       telefone: '8898765432',
+//       endereco: 'Rua C',
+//       patologia: 'Nenhuma',
+//       objetivo: 'Powerlifting',
+//       acompanhamentoNutricional: "Não",
+//       status: true)
+// ];

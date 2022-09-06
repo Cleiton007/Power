@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:power/providers/alunos_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -10,19 +11,20 @@ class AlunosFormScreen extends StatefulWidget {
 }
 
 class _AlunosFormScreenState extends State<AlunosFormScreen> {
-  // ignore: prefer_typing_uninitialized_variables
-  var _textoErro;
   final _nomeAlunoController = TextEditingController();
   final _dataNascController = TextEditingController();
+  var _sexoController = "";
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
   final _possuiPatologiaController = TextEditingController();
   final _possuiAcompanhamentoController = TextEditingController();
   final _objetivoController = TextEditingController();
+  DateTime? _dataCadastroController = DateTime.now();
 
   void _submitForm() {
     if (_nomeAlunoController.text.isEmpty ||
         _dataNascController.text.isEmpty ||
+        _sexoController.isEmpty ||
         _telefoneController.text.isEmpty ||
         _enderecoController.text.isEmpty ||
         _possuiPatologiaController.text.isEmpty ||
@@ -32,16 +34,27 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
     }
 
     Provider.of<AlunosProvider>(context, listen: false).addAluno(
-      _nomeAlunoController.text,
-      _dataNascController.text,
-      _telefoneController.text,
-      _enderecoController.text,
-      _possuiPatologiaController.text,
-      _possuiAcompanhamentoController.text,
-      _objetivoController.text,
-    );
-    _textoErro = null;
+        _nomeAlunoController.text,
+        _dataNascController.text,
+        _sexoController,
+        _telefoneController.text,
+        _enderecoController.text,
+        _possuiPatologiaController.text,
+        _possuiAcompanhamentoController.text,
+        _objetivoController.text,
+        _dataCadastroController!);
     Navigator.of(context).pop();
+  }
+
+  void _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2010),
+        lastDate: DateTime.now());
+    if (picked != null) {
+      _dataCadastroController = picked;
+    }
   }
 
   @override
@@ -65,7 +78,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _nomeAlunoController,
                         decoration: InputDecoration(
                           labelText: 'Nome do aluno',
-                          errorText: _textoErro,
                         ),
                       ),
                       const SizedBox(
@@ -75,8 +87,46 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _dataNascController,
                         decoration: InputDecoration(
                           labelText: 'Data de nascimento',
-                          errorText: _textoErro,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      const Text("Sexo",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, color: Colors.grey)),
+                      RadioListTile(
+                        title: const Text("Masculino"),
+                        // subtitle: _sexoController == ""
+                        //     ? const Text(
+                        //         "Escolha uma opção",
+                        //         style: TextStyle(color: Colors.red),
+                        //       )
+                        //     : null,
+                        activeColor: Theme.of(context).colorScheme.primary,
+                        value: "Masculino",
+                        groupValue: _sexoController,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _sexoController = value!;
+                          });
+                          print("Opção escolhida: " + value!);
+                        },
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      RadioListTile(
+                        title: const Text("Feminino"),
+                        activeColor: const Color.fromARGB(255, 206, 85, 126),
+                        value: "Feminino",
+                        groupValue: _sexoController,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _sexoController = value!;
+                          });
+                          print("Opção escolhida: " + value!);
+                        },
                       ),
                       const SizedBox(
                         height: 12,
@@ -85,7 +135,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _telefoneController,
                         decoration: InputDecoration(
                           labelText: 'Telefone',
-                          errorText: _textoErro,
                         ),
                       ),
                       const SizedBox(
@@ -95,7 +144,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _enderecoController,
                         decoration: InputDecoration(
                           labelText: 'Endereço',
-                          errorText: _textoErro,
                         ),
                       ),
                       const SizedBox(
@@ -105,7 +153,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _possuiPatologiaController,
                         decoration: InputDecoration(
                           labelText: 'Possui alguma patologia? Se sim, qual?',
-                          errorText: _textoErro,
                         ),
                       ),
                       const SizedBox(
@@ -115,7 +162,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _possuiAcompanhamentoController,
                         decoration: InputDecoration(
                           labelText: 'Possui acompanhamento Nutricional?',
-                          errorText: _textoErro,
                         ),
                       ),
                       const SizedBox(
@@ -125,9 +171,25 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                         controller: _objetivoController,
                         decoration: InputDecoration(
                           labelText: 'Objetivo',
-                          errorText: _textoErro,
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text("Data de cadastro"),
+                      IconButton(
+                        icon: const Icon(Icons.date_range),
+                        onPressed: _selectDate
+                        ,
+                      ),
+                      // TextFormField(
+                      //   inputFormatters: [MaskTextInputFormatter(mask: 'dd/mm/aaaa')],
+                      //   controller: ,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Data de cadastro',
+                      //     hintText: 'dd/mm/aaaa'
+                      //   ),
+                      // ),
                       const SizedBox(
                         height: 20,
                       ),

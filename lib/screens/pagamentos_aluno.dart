@@ -27,7 +27,7 @@ class PagamentosAluno extends StatelessWidget {
             ),
           ),
           Container(
-            height: 600,
+            height: 650,
             child: Consumer<PagamentosProvider>(
                 child: Container(),
                 builder: (ctx, pagamentosProvider, ch) => pagamentosProvider

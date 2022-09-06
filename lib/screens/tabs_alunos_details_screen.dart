@@ -10,7 +10,7 @@ class TabsAlunosDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final aluno = ModalRoute.of(context)!.settings.arguments;
+    //final aluno = ModalRoute.of(context)!.settings.arguments;
     return DefaultTabController(
       length: 5,
       child: Scaffold(

@@ -11,7 +11,6 @@ class DadosPessoaisAluno extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final aluno = ModalRoute.of(context)!.settings.arguments as Aluno;
-    //AlunosProvider alunosProvider = ModalRoute.of(context)!.settings.arguments as AlunosProvider;
     return SingleChildScrollView(
       child: Column(
         // ignore: prefer_const_literals_to_create_immutables
@@ -89,6 +88,37 @@ class DadosPessoaisAluno extends StatelessWidget {
                                   height: 8,
                                 ),
                                 Text(aluno.dataNascimento!),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 400,
+                    child: Card(
+                      color: const Color.fromARGB(221, 66, 70, 86)
+                          .withOpacity(0.5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Sexo",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(aluno.sexo!),
                               ],
                             ),
                           ],

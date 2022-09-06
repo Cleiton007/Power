@@ -13,6 +13,7 @@ class AlunosUpdateFormScreen extends StatefulWidget {
 class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
   final _nomeAlunoController = TextEditingController();
   final _dataNascController = TextEditingController();
+  var _sexoController = "";
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
   final _possuiPatologiaController = TextEditingController();
@@ -27,32 +28,32 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
     }
     if (_dataNascController.text.isEmpty) {
       _dataNascController.text = aluno.dataNascimento!;
-    }else{
+    } else {
       aluno.setDataNascimento(_dataNascController.text);
     }
     if (_telefoneController.text.isEmpty) {
       _telefoneController.text = aluno.telefone!;
-    }else{
+    } else {
       aluno.setTelefone(_telefoneController.text);
     }
     if (_enderecoController.text.isEmpty) {
       _enderecoController.text = aluno.endereco!;
-    }else{
+    } else {
       aluno.setEndereco(_enderecoController.text);
     }
     if (_possuiPatologiaController.text.isEmpty) {
       _possuiPatologiaController.text = aluno.patologia!;
-    }else{
+    } else {
       aluno.setPatologia(_possuiPatologiaController.text);
     }
     if (_possuiAcompanhamentoController.text.isEmpty) {
       _possuiAcompanhamentoController.text = aluno.acompanhamentoNutricional!;
-    }else{
+    } else {
       aluno.setAcompanhamentoNutricional(_possuiAcompanhamentoController.text);
     }
     if (_objetivoController.text.isEmpty) {
       _objetivoController.text = aluno.objetivo!;
-    }else{
+    } else {
       aluno.setObjetivo(_objetivoController.text);
     }
 
@@ -72,9 +73,10 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
   @override
   Widget build(BuildContext context) {
     final aluno = ModalRoute.of(context)!.settings.arguments as Aluno;
+    _sexoController = aluno.sexo!;
     return Scaffold(
       appBar: AppBar(
-        title:  const Text("Alterar dados pessoais"),
+        title: const Text("Alterar dados pessoais"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -104,6 +106,47 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
                           decoration: InputDecoration(
                               labelText: 'Data de nascimento',
                               hintText: aluno.dataNascimento),
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        const Text("Sexo",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 16, color: Colors.grey)),
+                        RadioListTile(
+                          title: const Text("Masculino"),
+                          // subtitle: _sexoController == ""
+                          //     ? const Text(
+                          //         "Escolha uma opção",
+                          //         style: TextStyle(color: Colors.red),
+                          //       )
+                          //     : null,
+                          selected: aluno.sexo == "Masculino" ? true : false,
+                          activeColor: Theme.of(context).colorScheme.primary,
+                          value: "Masculino",
+                          groupValue: _sexoController,
+                          onChanged: (String? value) {
+                            setState(() {
+                              aluno.setSexo(value!);//_sexoController = value!;
+                            });
+                            print("Opção escolhida: " + value!);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        RadioListTile(
+                          title: const Text("Feminino"),
+                          activeColor: const Color.fromARGB(255, 206, 85, 126),
+                          selected: aluno.sexo == "Feminino" ? true : false,
+                          value: "Feminino",
+                          groupValue: _sexoController,
+                          onChanged: (String? value) {
+                            setState(() {
+                              aluno.setSexo(value!); // = value!;
+                            });
+                            print("Opção escolhida: " + value!);
+                          },
                         ),
                         const SizedBox(
                           height: 12,
