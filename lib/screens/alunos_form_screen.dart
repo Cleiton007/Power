@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:intl/intl.dart';
 import 'package:power/providers/alunos_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +19,10 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
   final _possuiPatologiaController = TextEditingController();
   final _possuiAcompanhamentoController = TextEditingController();
   final _objetivoController = TextEditingController();
-  DateTime? _dataCadastroController = DateTime.now();
+  DateTime? _dataCadastroController;
 
   void _submitForm() {
+    _dataCadastroController ??= DateTime.now();
     if (_nomeAlunoController.text.isEmpty ||
         _dataNascController.text.isEmpty ||
         _sexoController.isEmpty ||
@@ -46,15 +47,21 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
     Navigator.of(context).pop();
   }
 
-  void _selectDate() async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2010),
-        lastDate: DateTime.now());
-    if (picked != null) {
-      _dataCadastroController = picked;
-    }
+  void _selectDate() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2010),
+            lastDate: DateTime.now())
+        .then((pickedDate) {
+      if (pickedDate != null) {
+        setState(() {
+          _dataCadastroController = pickedDate;
+        });
+      } else {
+        return;
+      }
+    });
   }
 
   @override
@@ -73,6 +80,7 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
                         controller: _nomeAlunoController,
@@ -110,7 +118,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                           setState(() {
                             _sexoController = value!;
                           });
-                          print("Opção escolhida: " + value!);
                         },
                       ),
                       const SizedBox(
@@ -125,7 +132,6 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                           setState(() {
                             _sexoController = value!;
                           });
-                          print("Opção escolhida: " + value!);
                         },
                       ),
                       const SizedBox(
@@ -133,7 +139,7 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                       ),
                       TextField(
                         controller: _telefoneController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Telefone',
                         ),
                       ),
@@ -176,22 +182,48 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text("Data de cadastro"),
-                      IconButton(
-                        icon: const Icon(Icons.date_range),
-                        onPressed: _selectDate
-                        ,
-                      ),
                       // TextFormField(
-                      //   inputFormatters: [MaskTextInputFormatter(mask: 'dd/mm/aaaa')],
-                      //   controller: ,
+                      //   //inputFormatters: [MaskTextInputFormatter(mask: 'dd/mm/aaaa')],
+                      //   enabled: false,
                       //   decoration: InputDecoration(
                       //     labelText: 'Data de cadastro',
                       //     hintText: 'dd/mm/aaaa'
                       //   ),
                       // ),
-                      const SizedBox(
-                        height: 20,
+                      const Text(
+                        "Data de cadastro",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 182, 178, 178),
+                            fontSize: 16),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 10.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              _dataCadastroController == null
+                                  ? DateFormat('dd/MM/y').format(DateTime.now())
+                                  : DateFormat('dd/MM/y')
+                                      .format(_dataCadastroController!),
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 182, 178, 178)),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.date_range),
+                              color: Theme.of(context).colorScheme.primary,
+                              onPressed: _selectDate,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Text(
+                        "(se o cadastro não é de hoje selecione uma data anterior)",
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                     ],
                   ),

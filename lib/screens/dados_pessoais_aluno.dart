@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:power/providers/alunos_provider.dart';
 import 'package:power/utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class DadosPessoaisAluno extends StatelessWidget {
             ),
           ),
           Container(
-            height: 500,
+            height: 640,
             margin: const EdgeInsets.symmetric(horizontal: 10),
             padding: const EdgeInsets.all(10),
             child: SingleChildScrollView(
@@ -67,6 +68,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -98,6 +100,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -129,6 +132,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -160,6 +164,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -191,6 +196,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -222,6 +228,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -253,6 +260,7 @@ class DadosPessoaisAluno extends StatelessWidget {
                   SizedBox(
                     width: 400,
                     child: Card(
+                      elevation: 10,
                       color: const Color.fromARGB(221, 66, 70, 86)
                           .withOpacity(0.5),
                       child: Padding(
@@ -274,6 +282,39 @@ class DadosPessoaisAluno extends StatelessWidget {
                                   height: 8,
                                 ),
                                 Text(aluno.objetivo!),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 400,
+                    child: Card(
+                      elevation: 10,
+                      color: const Color.fromARGB(221, 66, 70, 86)
+                          .withOpacity(0.5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Data de cadastro",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(DateFormat('dd/MM/y')
+                                      .format(aluno.dataCadastro!)),
                               ],
                             ),
                           ],

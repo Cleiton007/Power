@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/aluno.dart';
 import '../providers/alunos_provider.dart';
@@ -19,8 +20,11 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
   final _possuiPatologiaController = TextEditingController();
   final _possuiAcompanhamentoController = TextEditingController();
   final _objetivoController = TextEditingController();
+  DateTime? _dataCadastroController;
 
   void _updateForm(Aluno aluno) {
+    _dataCadastroController ??= aluno.dataCadastro;
+    aluno.setDataCadastro(_dataCadastroController!);
     if (_nomeAlunoController.text.isEmpty) {
       _nomeAlunoController.text = aluno.nomeCompleto!;
     } else {
@@ -70,6 +74,23 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
     return;
   }
 
+  void _selectDate() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2010),
+            lastDate: DateTime.now())
+        .then((pickedDate) {
+      if (pickedDate != null) {
+        setState(() {
+          _dataCadastroController = pickedDate;
+        });
+      } else {
+        return;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final aluno = ModalRoute.of(context)!.settings.arguments as Aluno;
@@ -89,6 +110,7 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextField(
                           autofocus: true,
@@ -127,9 +149,8 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
                           groupValue: _sexoController,
                           onChanged: (String? value) {
                             setState(() {
-                              aluno.setSexo(value!);//_sexoController = value!;
+                              aluno.setSexo(value!);
                             });
-                            print("Opção escolhida: " + value!);
                           },
                         ),
                         const SizedBox(
@@ -143,9 +164,8 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
                           groupValue: _sexoController,
                           onChanged: (String? value) {
                             setState(() {
-                              aluno.setSexo(value!); // = value!;
+                              aluno.setSexo(value!);
                             });
-                            print("Opção escolhida: " + value!);
                           },
                         ),
                         const SizedBox(
@@ -193,6 +213,42 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
                         ),
                         const SizedBox(
                           height: 20,
+                        ),
+                        const Text(
+                          "Data de cadastro",
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 182, 178, 178),
+                              fontSize: 16),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10.0,
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                _dataCadastroController == null
+                                    ? DateFormat('dd/MM/y')
+                                        .format(aluno.dataCadastro!)
+                                    : DateFormat('dd/MM/y')
+                                        .format(_dataCadastroController!),
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 182, 178, 178)),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.date_range),
+                                color: Theme.of(context).colorScheme.primary,
+                                onPressed: _selectDate,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          "(se o cadastro não é de hoje selecione uma data anterior)",
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ],
                     ),

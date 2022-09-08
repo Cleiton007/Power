@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/aluno.dart';
 
 import '../models/category.dart';
 
