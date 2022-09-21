@@ -2,9 +2,11 @@ class PagamentoItem {
   final String id;
   final String alunoId;
   final String nameAluno;
-  final String status;
-  final String dataPagamento;
+  final bool status;
+  final DateTime dataPagamento;
+  final DateTime dataVencimento;
   final String valorPagamento;
+  final String formaPagamento;
 
   PagamentoItem({
     required this.id,
@@ -12,6 +14,8 @@ class PagamentoItem {
     required this.nameAluno,
     required this.status,
     required this.dataPagamento,
+    required this.dataVencimento,
     required this.valorPagamento,
+    required this.formaPagamento,
   });
 }

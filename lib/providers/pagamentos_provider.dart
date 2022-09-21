@@ -19,11 +19,13 @@ class PagamentosProvider with ChangeNotifier {
   }
 
   void addPagamento(
-    String status,
+    bool status,
     String valor,
-    String dataPagamento,
+    DateTime dataPagamento,
+    DateTime dataVencimento,
     String alunoId,
     String nameAluno,
+    String formaPagamento,
   ) {
     final newPagamento = PagamentoItem(
         id: Random().nextInt(4).toString(),
@@ -31,7 +33,9 @@ class PagamentosProvider with ChangeNotifier {
         nameAluno: nameAluno,
         status: status,
         dataPagamento: dataPagamento,
-        valorPagamento: valor);
+        dataVencimento: dataVencimento,
+        valorPagamento: valor,
+        formaPagamento: formaPagamento);
 
     _items.add(newPagamento);
     notifyListeners();

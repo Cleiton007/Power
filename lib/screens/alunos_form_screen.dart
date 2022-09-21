@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:power/models/aluno.dart';
 import 'package:power/providers/alunos_provider.dart';
+import 'package:power/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
 class AlunosFormScreen extends StatefulWidget {
@@ -11,6 +15,9 @@ class AlunosFormScreen extends StatefulWidget {
 }
 
 class _AlunosFormScreenState extends State<AlunosFormScreen> {
+  late AlunosProvider alunosProvider;
+
+  final _id = Random().nextDouble().toString();
   final _nomeAlunoController = TextEditingController();
   final _dataNascController = TextEditingController();
   var _sexoController = "";
@@ -19,8 +26,11 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
   final _possuiPatologiaController = TextEditingController();
   final _possuiAcompanhamentoController = TextEditingController();
   final _objetivoController = TextEditingController();
+  final bool _status = false;
+
   DateTime? _dataCadastroController;
 
+  // ignore: prefer_typing_uninitialized_variables
   void _submitForm() {
     _dataCadastroController ??= DateTime.now();
     if (_nomeAlunoController.text.isEmpty ||
@@ -35,16 +45,68 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
     }
 
     Provider.of<AlunosProvider>(context, listen: false).addAluno(
-        _nomeAlunoController.text,
-        _dataNascController.text,
-        _sexoController,
-        _telefoneController.text,
-        _enderecoController.text,
-        _possuiPatologiaController.text,
-        _possuiAcompanhamentoController.text,
-        _objetivoController.text,
-        _dataCadastroController!);
-    Navigator.of(context).pop();
+      _id,
+      _nomeAlunoController.text,
+      _dataNascController.text,
+      _sexoController,
+      _telefoneController.text,
+      _enderecoController.text,
+      _possuiPatologiaController.text,
+      _possuiAcompanhamentoController.text,
+      _objetivoController.text,
+      _dataCadastroController!,
+      _status,
+    );
+
+    executarDialog();
+  }
+
+  void executarDialog() {
+    // ignore: prefer_typing_uninitialized_variables
+    var aluno;
+    alunosProvider = Provider.of<AlunosProvider>(context, listen: false);
+    List<Aluno> loadedAlunos = alunosProvider.items;
+    for (int index = 0; index < alunosProvider.itemsCount; index++) {
+      if (loadedAlunos[index].id == _id) {
+        aluno = loadedAlunos[index];
+        break;
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Cadastro do aluno"),
+        content: const Text("Lançar pagamento deste aluno?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                AppRoutes.PAGAMENTOS_FORM_SCREEN,
+                ModalRoute.withName(AppRoutes.ALUNOS_SCREEN),
+                arguments: aluno
+                  // context,
+                  // AppRoutes.PAGAMENTOS_FORM_SCREEN,
+                  
+                  // arguments: aluno
+                  );
+            },
+            child: const Text('Sim'),
+          ),
+          TextButton(
+            onPressed: () {
+              // aluno as Aluno;
+              // aluno.setStatus(false);
+              // Provider.of<AlunosProvider>(context, listen: false)
+              //     .updateAluno(aluno);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Não'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _selectDate() {
@@ -148,7 +210,7 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                       ),
                       TextField(
                         controller: _enderecoController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Endereço',
                         ),
                       ),
@@ -235,7 +297,9 @@ class _AlunosFormScreenState extends State<AlunosFormScreen> {
                 primary: const Color.fromARGB(255, 0, 165, 84),
                 elevation: 10,
               ),
-              onPressed: _submitForm,
+              onPressed: () {
+                _submitForm();
+              },
               icon: const Icon(Icons.add),
               label: const Text("Cadastrar Aluno"),
             ),

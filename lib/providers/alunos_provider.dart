@@ -20,6 +20,7 @@ class AlunosProvider with ChangeNotifier {
   }
 
   void addAluno(
+      String id,
       String nomeCompleto,
       String dataNasc,
       String sexo,
@@ -28,9 +29,10 @@ class AlunosProvider with ChangeNotifier {
       String patologia,
       String possuiAcompanhamento,
       String objetivo,
-      DateTime dataCadastro) {
+      DateTime dataCadastro,
+      bool status) {
     final newAluno = Aluno(
-        id: Random().nextDouble().toString(),
+        id: id,
         nomeCompleto: nomeCompleto,
         dataNascimento: dataNasc,
         sexo: sexo,
@@ -40,7 +42,7 @@ class AlunosProvider with ChangeNotifier {
         objetivo: objetivo,
         acompanhamentoNutricional: possuiAcompanhamento,
         dataCadastro: dataCadastro,
-        status: true);
+        status: status);
 
     _items.add(newAluno);
     notifyListeners();

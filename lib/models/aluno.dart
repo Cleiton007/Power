@@ -63,4 +63,8 @@ class Aluno {
   void setDataCadastro(DateTime novaData) {
     dataCadastro = novaData;
   }
+
+  void setStatus(bool newStatus) {
+    status = newStatus;
+  }
 }

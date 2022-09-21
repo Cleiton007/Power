@@ -51,11 +51,11 @@ class AlunosScreen extends StatelessWidget {
                             .itemByIndex(i)
                             .status
                             .toString()
-                            .replaceAll('false', 'Inativo'),
+                            .replaceAll('false', 'Pendente'),
                     style: TextStyle(
                         color: alunosProvider.itemByIndex(i).status
                             ? Colors.green
-                            : Colors.red),
+                            : Colors.orange),
                   ),
                   trailing: Icon(
                     Icons.arrow_forward_ios,
