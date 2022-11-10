@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:power/providers/pagamentos_provider.dart';
-import 'package:power/screens/alunos_details_screen.dart';
 import 'package:power/screens/alunos_form_screen.dart';
 import 'package:power/screens/alunos_screen.dart';
 import 'package:power/screens/alunos_update_form_screen.dart';
-import 'package:power/screens/gym_overview_screen.dart';
+import 'package:power/screens/main_screen.dart';
 import 'package:power/screens/pagamentos_form_screen.dart';
+import 'package:power/screens/pagamentos_screen.dart';
+import 'package:power/screens/pagamentos_update_form_screen.dart';
 import 'package:power/screens/tabs_alunos_details_screen.dart';
 import 'package:power/utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -74,16 +75,20 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
         routes: {
-          AppRoutes.HOME: (ctx) => const GymOverviewScreen(),
+          AppRoutes.HOME: (ctx) => const MainScreen(),
           AppRoutes.ALUNOS_SCREEN: (ctx) => const AlunosScreen(),
           AppRoutes.ALUNOS_FORM: (ctx) => const AlunosFormScreen(),
-          AppRoutes.ALUNOS_DETAILS: (ctx) => const AlunoDetailScreen(),
+          //AppRoutes.ALUNOS_DETAILS: (ctx) => const AlunoDetailScreen(),
           AppRoutes.TABS_ALUNOS_DETAILS: (ctx) =>
               const TabsAlunosDetailsScreen(),
           AppRoutes.ALUNOS_UPDATE_FORM_SCREEN: (ctx) =>
               const AlunosUpdateFormScreen(),
           AppRoutes.PAGAMENTOS_FORM_SCREEN: (ctx) =>
               const PagamentosFormScreen(),
+          AppRoutes.PAGAMENTOS_UPDATE_FORM_SCREEN: (ctx) =>
+              const PagamentosUpdateFormScreen(),
+          AppRoutes.PAGAMENTOS_SCREEN: (ctx) =>
+              const PagamentosScreen(),
         },
       ),
     );

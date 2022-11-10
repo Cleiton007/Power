@@ -97,7 +97,7 @@ class _AlunosUpdateFormScreenState extends State<AlunosUpdateFormScreen> {
     _sexoController = aluno.sexo!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Alterar dados pessoais"),
+        title: const Text("Alterar dados do aluno"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),

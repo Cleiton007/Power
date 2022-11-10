@@ -1,12 +1,12 @@
 class PagamentoItem {
-  final String id;
-  final String alunoId;
-  final String nameAluno;
-  final bool status;
-  final DateTime dataPagamento;
-  final DateTime dataVencimento;
-  final String valorPagamento;
-  final String formaPagamento;
+  String? id;
+  String? alunoId;
+  String? nameAluno;
+  bool? status;
+  DateTime? dataPagamento;
+  DateTime? dataVencimento;
+  String? valorPagamento;
+  String? formaPagamento;
 
   PagamentoItem({
     required this.id,
@@ -18,4 +18,25 @@ class PagamentoItem {
     required this.valorPagamento,
     required this.formaPagamento,
   });
+
+  void setStatus(bool novoStatus) {
+    status = novoStatus;
+  }
+
+  void setDataPagamento(DateTime novaDataPagamento) {
+    dataPagamento = novaDataPagamento;
+  }
+
+  void setDataVencimento(DateTime novaDataVencimento) {
+    dataVencimento = novaDataVencimento;
+  }
+
+  void setValor(String novoValor) {
+    valorPagamento = novoValor;
+  }
+
+  void setFormaPagamento(String novaForma) {
+    formaPagamento = novaForma;
+  }
+  
 }

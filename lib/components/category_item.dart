@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/category.dart';
-import '../screens/alunos_screen.dart';
 import '../utils/app_routes.dart';
 
 class CategoyItem extends StatelessWidget {
@@ -14,15 +13,14 @@ class CategoyItem extends StatelessWidget {
       case "c1":
         Navigator.of(context).pushNamed(
           AppRoutes.ALUNOS_SCREEN,
-          arguments: category,
         );
         break;
-      default:
+      case "c2":
+        Navigator.of(context).pushNamed(
+          AppRoutes.PAGAMENTOS_SCREEN,
+        );
+        break;
     }
-    // Navigator.of(context).pushNamed(
-    //   AppRoutes.CATEGORIES_GYM,
-    //   arguments: category,
-    // );
   }
 
   @override

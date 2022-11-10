@@ -1,6 +1,12 @@
 //import 'package:power/models/perimetria.dart';
 
-class Aluno {
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:power/utils/constants.dart';
+
+class Aluno with ChangeNotifier {
   String? id;
   String? nomeCompleto;
   String? dataNascimento;
@@ -66,5 +72,23 @@ class Aluno {
 
   void setStatus(bool newStatus) {
     status = newStatus;
+  }
+
+  void _toggleStatus() {
+    status = !status;
+    notifyListeners();
+  }
+
+  Future<void> toggleStatus() async {
+    _toggleStatus();
+
+    final response = await http.patch(
+      Uri.parse('${Constants.ALUNO_BASE_URL}/$id.json'),
+      body: jsonEncode({"status": status}),
+    );
+
+    if (response.statusCode >= 400) {
+      _toggleStatus();
+    }
   }
 }

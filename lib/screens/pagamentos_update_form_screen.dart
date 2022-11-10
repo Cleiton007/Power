@@ -1,65 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:power/models/aluno.dart';
-import 'package:power/providers/alunos_provider.dart';
+import 'package:power/models/pagamento_item.dart';
 import 'package:power/providers/pagamentos_provider.dart';
-import 'package:power/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
-class PagamentosFormScreen extends StatefulWidget {
-  const PagamentosFormScreen({Key? key}) : super(key: key);
+class PagamentosUpdateFormScreen extends StatefulWidget {
+  const PagamentosUpdateFormScreen({Key? key}) : super(key: key);
 
   @override
-  State<PagamentosFormScreen> createState() => _PagamentosFormScreenState();
+  State<PagamentosUpdateFormScreen> createState() =>
+      _PagamentosUpdateFormScreenState();
 }
 
-class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
+class _PagamentosUpdateFormScreenState
+    extends State<PagamentosUpdateFormScreen> {
   final _valorController = TextEditingController();
   DateTime? _dataPagamentoController;
   DateTime? _dataVencimentoController;
   final _formaPagamentoController = TextEditingController();
   bool _status = true;
 
-  Future<void> _submitPagamento() async {
-    _dataPagamentoController ??= DateTime.now();
+  void _updateForm(PagamentoItem pagamentoItem) {
+    _dataPagamentoController ??= pagamentoItem.dataPagamento;
+    pagamentoItem.setDataPagamento(_dataPagamentoController!);
     calculoVencimento(_dataPagamentoController!);
-    if (_valorController.text.isEmpty ||
-        _formaPagamentoController.text.isEmpty) {
-      return;
+    pagamentoItem.setDataVencimento(_dataVencimentoController!);
+    pagamentoItem.setStatus(_status);
+    if (_valorController.text.isEmpty) {
+      _valorController.text = pagamentoItem.valorPagamento!;
+    } else {
+      pagamentoItem.setValor(_valorController.text);
+    }
+    if (_formaPagamentoController.text.isEmpty) {
+      _formaPagamentoController.text = pagamentoItem.formaPagamento!;
+    } else {
+      pagamentoItem.setFormaPagamento(_formaPagamentoController.text);
     }
 
-    try {
-      final aluno = ModalRoute.of(context)?.settings.arguments as Aluno;
-      aluno.toggleStatus();
-      await Provider.of<AlunosProvider>(context, listen: false)
-          .updateAluno(aluno);
-      Provider.of<PagamentosProvider>(context, listen: false).addPagamento(
-          _status,
-          _valorController.text,
-          _dataPagamentoController!,
-          _dataVencimentoController!,
-          aluno.id!,
-          aluno.nomeCompleto!,
-          _formaPagamentoController.text);
-
-      Navigator.of(context).pop();
-    } catch (error) {
-      await showDialog<void>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                title: Text(
-                    'Erro ao salvar pagamento no Firebase! Contate o desenvolvedor.'),
-                content: Text('Código do erro: 1000'),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      //restorablePushNamedAndRemoveUntil(AppRoutes.HOME, ((route) => false)),//pushNamedAndRemoveUntil(AppRoutes.HOME, (route) => false),
-                      child: const Text('Ok')),
-                ],
-              ));
-    }
+    Provider.of<PagamentosProvider>(context, listen: false)
+        .updatePagamento(pagamentoItem);
+    Navigator.of(context).pop();
+    return;
   }
 
   void calculoVencimento(DateTime dataPagamento) {
@@ -81,7 +62,6 @@ class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
         dataPagamento.add(Duration(days: differenceDaysLimit));
     final difference = dataPagamento.difference(DateTime.now()).inDays * (-1);
     if (difference > differenceDaysLimit) {
-
       setState(() {
         _status = false;
       });
@@ -110,9 +90,11 @@ class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pagamento =
+        ModalRoute.of(context)!.settings.arguments as PagamentoItem;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cadastro Mensalidade"),
+        title: const Text("Alterar Pagamento"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -129,8 +111,9 @@ class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
                     children: [
                       TextField(
                         controller: _valorController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Valor',
+                          hintText: "R\$" + pagamento.valorPagamento!,
                         ),
                       ),
                       const SizedBox(
@@ -150,10 +133,10 @@ class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
                         child: Row(
                           children: [
                             Text(
-                              _dataPagamentoController == null
-                                  ? DateFormat('dd/MM/y').format(DateTime.now())
-                                  : DateFormat('dd/MM/y')
-                                      .format(_dataPagamentoController!),
+                              DateFormat('dd/MM/y').format(
+                                  _dataPagamentoController != null
+                                      ? _dataPagamentoController!
+                                      : pagamento.dataPagamento!),
                               style: TextStyle(
                                   color: Color.fromARGB(255, 182, 178, 178)),
                             ),
@@ -173,8 +156,9 @@ class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
                       ),
                       TextField(
                         controller: _formaPagamentoController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Forma de Pagamento',
+                          hintText: pagamento.formaPagamento,
                         ),
                       ),
                       const SizedBox(
@@ -183,15 +167,30 @@ class _PagamentosFormScreenState extends State<PagamentosFormScreen> {
                     ],
                   ),
                 ),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 0, 165, 84),
-                    elevation: 10,
-                  ),
-                  onPressed: _submitPagamento,
-                  icon: const Icon(Icons.save),
-                  label: const Text("Salvar Pagamento"),
-                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color.fromARGB(255, 0, 165, 84),
+                          elevation: 10,
+                        ),
+                        onPressed: () => _updateForm(pagamento),
+                        icon: const Icon(Icons.save),
+                        label: const Text("Salvar alterações"),
+                      ),
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                          elevation: 10,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(Icons.cancel),
+                        label: const Text("Cancelar"),
+                      ),
+                    ]),
               ],
             ),
           ),

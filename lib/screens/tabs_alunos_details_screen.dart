@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:power/models/aluno.dart';
-import 'package:power/models/pagamento_item.dart';
-import 'package:power/providers/alunos_provider.dart';
-import 'package:power/screens/dados_pessoais_aluno.dart';
-import 'package:power/screens/pagamentos_aluno.dart';
+import 'package:power/components_tabBar/dados_pessoais_aluno.dart';
+import 'package:power/components_tabBar/pagamentos_aluno.dart';
 
 class TabsAlunosDetailsScreen extends StatelessWidget {
   const TabsAlunosDetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //final aluno = ModalRoute.of(context)!.settings.arguments;
     return DefaultTabController(
+      initialIndex: 0,
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Informações do aluno"),
-          bottom: const TabBar(tabs: [
-            Tab(          
+          title: const Text("Informações do aluno"),
+          bottom: const TabBar(
+
+            tabs: [
+            Tab(
               icon: Icon(Icons.account_circle),
             ),
-            Tab(          
+            Tab(
               icon: Icon(Icons.monetization_on),
             ),
-            Tab(          
+            Tab(
               icon: Icon(Icons.accessibility_outlined),
             ),
-            Tab(          
+            Tab(
               icon: Icon(Icons.assignment_rounded),
             ),
-            Tab(          
+            Tab(
               icon: Icon(Icons.checklist),
             ),
           ]),
